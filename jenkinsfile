@@ -1,4 +1,10 @@
 pipeline {
+    environment {
+        registry = "totoy/hello-world-deployment"
+        registryCredential = 'dockerhub1' 
+        dockerImage = ''
+    }
+    
     agent any
     stages {
         stage('Clean') {
@@ -15,6 +21,22 @@ pipeline {
         stage('Package') { 
             steps {
                 sh 'mvn package' 
+            }
+        }
+        stage('Building image'){
+            steps {
+                script {
+                    dockerImage = docker.build registry ":$BUILD_NUMBER"
+                }
+            }
+        }
+        stage('Deploy Image') {
+            steps {
+                script {
+                    docker.withRegistry( '', registryCredential ) {
+                        dockerImage.push()
+                    }
+                }
             }
         }
     }
