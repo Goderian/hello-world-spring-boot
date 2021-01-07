@@ -1,7 +1,7 @@
 pipeline {
     environment {
         registry = "totoy/hello-world-deployment"
-        registryCredential = 'dockerhub' 
+        registryCredential = 'dockerhub2' 
         dockerImage = ''
     }
     
